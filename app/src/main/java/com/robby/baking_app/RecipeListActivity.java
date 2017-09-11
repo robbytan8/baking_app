@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
  * An activity representing a list of Recipes. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link RecipeDetailActivity} representing
+ * lead to a {@link RecipeIngredientActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  *
@@ -47,7 +47,7 @@ public class RecipeListActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        RecipeIngredientsStepsAdapter recipeIngredientsStepsAdapter = null;
+        RecipeIngredientsStepsAdapter recipeIngredientsStepsAdapter;
         if (intent.hasExtra(Intent.EXTRA_STREAM)) {
             Recipe recipe = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             ArrayList<Object> objects = new ArrayList<>();

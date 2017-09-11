@@ -1,6 +1,7 @@
 package com.robby.baking_app.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.robby.baking_app.R;
+import com.robby.baking_app.RecipeIngredientActivity;
 import com.robby.baking_app.RecipeIngredientFragment;
 import com.robby.baking_app.RecipeListActivity;
+import com.robby.baking_app.RecipeStepFragment;
 import com.robby.baking_app.entity.RecipeStep;
 
 import java.util.ArrayList;
@@ -70,13 +73,23 @@ public class RecipeIngredientsStepsAdapter extends RecyclerView.Adapter<Recycler
         switch (holder.getItemViewType()) {
             case step:
                 StepsViewHolder holder1 = (StepsViewHolder) holder;
-                RecipeStep recipeStep = (RecipeStep) objects.get(position);
+                final RecipeStep recipeStep = (RecipeStep) objects.get(position);
                 holder1.tvRecipeSteps.setText("Step " + (Integer.parseInt(recipeStep.getId()) + 1)
                         + ": " + recipeStep.getShortDescription());
                 holder1.cvRecipeSteps.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        boolean twoPane = ((RecipeListActivity) context).ismTwoPane();
+                        if (twoPane) {
+                            Bundle arguments = new Bundle();
+                            arguments.putParcelable(context.getResources()
+                                    .getString(R.string.send_parcelable_recipe_step), recipeStep);
+                            RecipeStepFragment fragment = new RecipeStepFragment();
+                            fragment.setArguments(arguments);
+                            ((RecipeListActivity) context).getSupportFragmentManager()
+                                    .beginTransaction().replace(R.id.recipe_detail_container, fragment)
+                                    .commit();
+                        }
                     }
                 });
                 break;
@@ -97,11 +110,11 @@ public class RecipeIngredientsStepsAdapter extends RecyclerView.Adapter<Recycler
                             ((RecipeListActivity) context).getSupportFragmentManager()
                                     .beginTransaction().replace(R.id.recipe_detail_container, fragment)
                                     .commit();
-//                        } else {
-//                            Context context = v.getContext();
-//                            Intent intent = new Intent(context, RecipeDetailActivity.class);
-//                            intent.putExtra(RecipeIngredientFragment.ARG_ITEM_ID, holder.mItem.id);
-//                            context.startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(context, RecipeIngredientActivity.class);
+                            intent.putExtra(Intent.EXTRA_STREAM, objects.get(
+                                    holder.getAdapterPosition()).toString());
+                            context.startActivity(intent);
                         }
                     }
                 });

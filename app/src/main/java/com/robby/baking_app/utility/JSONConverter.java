@@ -31,16 +31,13 @@ public class JSONConverter {
             builder.append(line);
         }
         inputStream.close();
-//        System.out.println(builder.toString());
         return builder.toString();
     }
 
     public static List<Recipe> convertDataToRecipeEntity(String data) {
         List<Recipe> recipes = new ArrayList<>();
         try {
-//            JSONObject jsonObject = new JSONObject(data);
             JSONArray jsonArray = new JSONArray(data);
-//            JSONArray jsonArray = jsonObject.getJSONArray("");
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject object = jsonArray.getJSONObject(i);
                 Recipe recipe = new Recipe();

@@ -31,7 +31,7 @@
                 android:value="com.robby.baking_app.RecipeMainActivity" />
         </activity>
         <activity
-            android:name=".RecipeDetailActivity"
+            android:name=".RecipeIngredientActivity"
             android:label="@string/title_recipe_detail"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

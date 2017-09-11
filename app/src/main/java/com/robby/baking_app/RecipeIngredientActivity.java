@@ -16,12 +16,12 @@ import android.view.MenuItem;
  *
  * @author Robby Tan
  */
-public class RecipeDetailActivity extends AppCompatActivity {
+public class RecipeIngredientActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_detail);
+        setContentView(R.layout.activity_ingredient_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
@@ -43,14 +43,21 @@ public class RecipeDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
+//            Bundle arguments = new Bundle();
+//            arguments.putString(RecipeIngredientFragment.ARG_ITEM_ID,
+//                    getIntent().getStringExtra(RecipeIngredientFragment.ARG_ITEM_ID));
+//            RecipeIngredientFragment fragment = new RecipeIngredientFragment();
+//            fragment.setArguments(arguments);
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.recipe_detail_container, fragment)
+//                    .commit();
             Bundle arguments = new Bundle();
-            arguments.putString(RecipeIngredientFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(RecipeIngredientFragment.ARG_ITEM_ID));
+            arguments.putString(this.getResources().getString(R.string.send_string_ingredients_key),
+                    getIntent().getStringExtra(Intent.EXTRA_STREAM));
             RecipeIngredientFragment fragment = new RecipeIngredientFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.recipe_detail_container, fragment)
-                    .commit();
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.recipe_detail_container, fragment).commit();
         }
     }
 
