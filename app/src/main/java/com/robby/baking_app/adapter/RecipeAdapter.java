@@ -7,11 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.robby.baking_app.R;
 import com.robby.baking_app.RecipeListActivity;
 import com.robby.baking_app.entity.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -60,6 +62,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 context.startActivity(intent);
             }
         });
+        if (recipes.get(holder.getAdapterPosition()).getImagePath().isEmpty()) {
+            holder.imRecipeImage.setImageResource(R.mipmap.no_recipe_image);
+            holder.imRecipeImage.setAlpha(0.2f);
+        } else {
+            Picasso.with(context)
+                    .load(recipes.get(holder.getAdapterPosition()).getImagePath())
+                    .into(holder.imRecipeImage);
+        }
     }
 
     @Override
@@ -75,6 +85,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         TextView tvRecipeItemName;
         @BindView(R.id.tv_recipe_servings)
         TextView tvRecipeItemServing;
+        @BindView(R.id.im_recipe_image)
+        ImageView imRecipeImage;
 
         public RecipeViewHolder(View itemView) {
             super(itemView);
