@@ -9,17 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.robby.baking_app.adapter.RecipeAdapter;
 import com.robby.baking_app.entity.Recipe;
-import com.robby.baking_app.utility.JSONConverter;
 import com.robby.baking_app.utility.NetworkUtils;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,9 +96,8 @@ public class RecipeMainActivity extends AppCompatActivity implements LoaderManag
                     int responseCode = connection.getResponseCode();
                     if (responseCode == HttpURLConnection.HTTP_OK) {
                         recipes = new ArrayList<>();
-                        inputStream = new BufferedInputStream(connection.getInputStream());
-                        String recipeInString = JSONConverter.parseDataToString(inputStream);
-                        recipes.addAll(JSONConverter.convertDataToRecipeEntity(recipeInString));
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        recipes.addAll(Arrays.asList(objectMapper.readValue(url, Recipe[].class)));
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -117,6 +116,8 @@ public class RecipeMainActivity extends AppCompatActivity implements LoaderManag
     public void onLoadFinished(Loader<ArrayList<Recipe>> loader, ArrayList<Recipe> data) {
         if (null != data) {
             this.getRecipeAdapter().setRecipes(data);
+        } else {
+            Toast.makeText(this, "Error Loading Data", Toast.LENGTH_SHORT).show();
         }
     }
 

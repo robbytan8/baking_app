@@ -20,8 +20,8 @@ public class RecipeStep implements Parcelable{
     private String id;
     private String shortDescription;
     private String description;
-    private String videoUrl;
-    private String thumbnailUrl;
+    private String videoURL;
+    private String thumbnailURL;
 
     public RecipeStep() {
     }
@@ -30,8 +30,8 @@ public class RecipeStep implements Parcelable{
         id = in.readString();
         shortDescription = in.readString();
         description = in.readString();
-        videoUrl = in.readString();
-        thumbnailUrl = in.readString();
+        videoURL = in.readString();
+        thumbnailURL = in.readString();
     }
 
     public static final Creator<RecipeStep> CREATOR = new Creator<RecipeStep>() {
@@ -70,20 +70,20 @@ public class RecipeStep implements Parcelable{
         this.description = description;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
+    public String getVideoURL() {
+        return videoURL;
     }
 
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
+    public String getThumbnailURL() {
+        return thumbnailURL;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+    public void setThumbnailURL(String thumbnailURL) {
+        this.thumbnailURL = thumbnailURL;
     }
 
     @Override
@@ -96,7 +96,7 @@ public class RecipeStep implements Parcelable{
         parcel.writeString(id);
         parcel.writeString(shortDescription);
         parcel.writeString(description);
-        parcel.writeString(videoUrl);
-        parcel.writeString(thumbnailUrl);
+        parcel.writeString(videoURL);
+        parcel.writeString(thumbnailURL);
     }
 }

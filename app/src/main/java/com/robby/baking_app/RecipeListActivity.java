@@ -27,7 +27,6 @@ import butterknife.ButterKnife;
  */
 public class RecipeListActivity extends AppCompatActivity {
 
-    private boolean mTwoPane;
     @BindView(R.id.recipe_list)
     RecyclerView recyclerView;
 
@@ -60,13 +59,6 @@ public class RecipeListActivity extends AppCompatActivity {
 
         assert recyclerView != null;
 
-        if (findViewById(R.id.recipe_detail_container) != null) {
-            mTwoPane = true;
-        }
         recyclerView.setAdapter(recipeIngredientsStepsAdapter);
-    }
-
-    public boolean ismTwoPane() {
-        return mTwoPane;
     }
 }

@@ -38,6 +38,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.robby.baking_app.RecipeListActivity" />
         </activity>
+        <activity
+            android:name=".RecipeStepActivity"
+            android:label="@string/title_recipe_detail">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.robby.baking_app.RecipeListActivity" />
+        </activity>
     </application>
 
 </manifest>

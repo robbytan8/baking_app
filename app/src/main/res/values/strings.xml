@@ -3,6 +3,7 @@
     <string name="title_recipe_detail">Recipe Detail</string>
     <string name="send_string_ingredients_key" translatable="false">INGREDIENTS_KEY</string>
     <string name="send_parcelable_recipe_step" translatable="false">PARCEL_RECIPE_STEP</string>
+    <string name="restore_state" translatable="false">RESTORE_STATE</string>
     <string name="label_recipe_ingredient">Recipe Ingredients</string>
     <string name="label_servings">Servings: </string>
 </resources>

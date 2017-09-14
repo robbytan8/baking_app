@@ -62,12 +62,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 context.startActivity(intent);
             }
         });
-        if (recipes.get(holder.getAdapterPosition()).getImagePath().isEmpty()) {
+        if (recipes.get(holder.getAdapterPosition()).getImage().isEmpty()) {
             holder.imRecipeImage.setImageResource(R.mipmap.no_recipe_image);
             holder.imRecipeImage.setAlpha(0.2f);
         } else {
             Picasso.with(context)
-                    .load(recipes.get(holder.getAdapterPosition()).getImagePath())
+                    .load(recipes.get(holder.getAdapterPosition()).getImage())
                     .into(holder.imRecipeImage);
         }
     }

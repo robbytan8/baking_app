@@ -25,7 +25,7 @@ public class Recipe implements Parcelable {
     private ArrayList<RecipeIngredient> ingredients;
     private ArrayList<RecipeStep> steps;
     private int servings;
-    private String imagePath;
+    private String image;
 
     public Recipe() {
         ingredients = new ArrayList<>();
@@ -39,7 +39,7 @@ public class Recipe implements Parcelable {
         ingredients = in.createTypedArrayList(RecipeIngredient.CREATOR);
         steps = in.createTypedArrayList(RecipeStep.CREATOR);
         servings = in.readInt();
-        imagePath = in.readString();
+        image = in.readString();
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
@@ -94,18 +94,18 @@ public class Recipe implements Parcelable {
         this.servings = servings;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImage() {
+        return image;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getIngredientsInString() {
         StringBuilder builder = new StringBuilder("");
         for (RecipeIngredient ingredient : ingredients) {
-            builder.append(ingredient.getIngredientName()).append(" (")
+            builder.append(ingredient.getIngredient()).append(" (")
                     .append(ingredient.getQuantity()).append(" ")
                     .append(ingredient.getMeasure()).append(")")
                     .append("\n\n");
@@ -125,6 +125,6 @@ public class Recipe implements Parcelable {
         parcel.writeTypedList(ingredients);
         parcel.writeTypedList(steps);
         parcel.writeInt(servings);
-        parcel.writeString(imagePath);
+        parcel.writeString(image);
     }
 }

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 def DATA_URL = '\"https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json\"';
+def RECIPE_DEF_IMG = '\"https://www.rubios.com/sites/default/files/banners/Ingredients_Feature.jpg\"';
 
 android {
     compileSdkVersion 26
@@ -21,6 +22,10 @@ android {
     }
     defaultConfig {
         buildConfigField("String", "DATA_URL", DATA_URL)
+        buildConfigField("String", "RECIPE_DEF_IMG", RECIPE_DEF_IMG)
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
     }
 }
 
@@ -28,23 +33,30 @@ repositories {
     jcenter()
 }
 
+ext {
+    supportLibVersion = '26.+'
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support:support-v4:26.+'
-    compile 'com.android.support:recyclerview-v7:26.+'
-    compile 'com.android.support:design:26.+'
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.android.support:support-v4:${supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compile "com.android.support:design:${supportLibVersion}"
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support:cardview-v7:26.+'
+    compile "com.android.support:cardview-v7:${supportLibVersion}"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.android.exoplayer:exoplayer:r2.5.1'
     compile 'com.google.android.exoplayer:exoplayer-core:r2.5.1'
     compile 'com.google.android.exoplayer:exoplayer-dash:r2.5.1'
     compile 'com.google.android.exoplayer:exoplayer-ui:r2.5.1'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.7.3'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.3'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 }

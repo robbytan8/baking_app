@@ -17,7 +17,7 @@ public class RecipeIngredient implements Parcelable {
 
     private String quantity;
     private String measure;
-    private String ingredientName;
+    private String ingredient;
 
     public RecipeIngredient() {
     }
@@ -25,7 +25,7 @@ public class RecipeIngredient implements Parcelable {
     private RecipeIngredient(Parcel in) {
         quantity = in.readString();
         measure = in.readString();
-        ingredientName = in.readString();
+        ingredient = in.readString();
     }
 
     public static final Creator<RecipeIngredient> CREATOR = new Creator<RecipeIngredient>() {
@@ -56,12 +56,12 @@ public class RecipeIngredient implements Parcelable {
         this.measure = measure;
     }
 
-    public String getIngredientName() {
-        return ingredientName;
+    public String getIngredient() {
+        return ingredient;
     }
 
-    public void setIngredientName(String ingredientName) {
-        this.ingredientName = ingredientName;
+    public void setIngredient(String ingredient) {
+        this.ingredient = ingredient;
     }
 
     @Override
@@ -73,6 +73,6 @@ public class RecipeIngredient implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(quantity);
         parcel.writeString(measure);
-        parcel.writeString(ingredientName);
+        parcel.writeString(ingredient);
     }
 }
