@@ -45,6 +45,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.robby.baking_app.RecipeListActivity" />
         </activity>
+
+        <receiver android:name=".BakingAppWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.robby.baking_app.DATA_FETCHED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_info" />
+        </receiver>
+
+        <service android:name=".RecipeFetchService"
+            android:permission="android.permission.BIND_REMOTEVIEWS">
+        </service>
     </application>
 
 </manifest>

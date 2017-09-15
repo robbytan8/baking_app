@@ -15,7 +15,6 @@ import com.robby.baking_app.entity.Recipe;
 import com.robby.baking_app.utility.NetworkUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -85,7 +84,6 @@ public class RecipeMainActivity extends AppCompatActivity implements LoaderManag
 
             @Override
             public ArrayList<Recipe> loadInBackground() {
-                InputStream inputStream;
                 HttpURLConnection connection = null;
                 try {
                     URL url = NetworkUtils.buildUrl();
