@@ -64,7 +64,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         });
         if (recipes.get(holder.getAdapterPosition()).getImage().isEmpty()) {
             holder.imRecipeImage.setImageResource(R.mipmap.no_recipe_image);
-            holder.imRecipeImage.setAlpha(0.2f);
         } else {
             Picasso.with(context)
                     .load(recipes.get(holder.getAdapterPosition()).getImage())
@@ -91,6 +90,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         public RecipeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            imRecipeImage.setAlpha(0.2f);
         }
     }
 }

@@ -108,7 +108,7 @@ public class Recipe implements Parcelable {
             builder.append(ingredient.getIngredient()).append(" (")
                     .append(ingredient.getQuantity()).append(" ")
                     .append(ingredient.getMeasure()).append(")")
-                    .append("\n\n");
+                    .append("\n");
         }
         return builder.toString();
     }

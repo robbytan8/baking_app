@@ -26,7 +26,7 @@ import java.util.List;
 public class RecipeFetchService extends Service {
 
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    private List<Recipe> recipes;
+    private static List<Recipe> recipes;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -60,6 +60,7 @@ public class RecipeFetchService extends Service {
                         ObjectMapper objectMapper = new ObjectMapper();
                         getRecipes().addAll(Arrays.asList(objectMapper.readValue(url, Recipe[].class)));
                     }
+                    populateWidget();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -68,10 +69,10 @@ public class RecipeFetchService extends Service {
                     }
                 }
             }
-        });
+        }).start();
     }
 
-    public List<Recipe> getRecipes() {
+    public static List<Recipe> getRecipes() {
         if (recipes == null) {
             recipes = new ArrayList<>();
         }

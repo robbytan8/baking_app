@@ -50,6 +50,8 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.robby.baking_app.DATA_FETCHED" />
+                <action android:name="com.robby.baking_app.ACTION_LEFT" />
+                <action android:name="com.robby.baking_app.ACTION_RIGHT" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
