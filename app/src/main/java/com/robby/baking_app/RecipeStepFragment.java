@@ -1,9 +1,12 @@
 package com.robby.baking_app;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +66,7 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        saveVideoCurrentPosition();
         player.release();
     }
 
@@ -70,6 +74,12 @@ public class RecipeStepFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         player.release();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadVideoCurrentPosition();
     }
 
     @Override
@@ -118,7 +128,7 @@ public class RecipeStepFragment extends Fragment {
 
         // Bind the player to the view.
         recipeStepVideo.setPlayer(player);
-        if (recipeStep.getVideoURL().isEmpty()) {
+        if (TextUtils.isEmpty(recipeStep.getVideoURL())) {
             recipeStepVideo.setVisibility(View.INVISIBLE);
         }
     }
@@ -127,5 +137,23 @@ public class RecipeStepFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.step_detail, container, false);
+    }
+
+    private void saveVideoCurrentPosition() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(
+                getResources().getString(R.string.shared_pref_name),
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(getResources().getString(R.string.shared_pref_key_video_position),
+                player.getCurrentPosition());
+        editor.apply();
+    }
+
+    private void loadVideoCurrentPosition() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(
+                getResources().getString(R.string.shared_pref_name),
+                Context.MODE_PRIVATE);
+        player.seekTo(sharedPreferences.getLong(getResources().getString(
+                R.string.shared_pref_key_video_position), 0));
     }
 }

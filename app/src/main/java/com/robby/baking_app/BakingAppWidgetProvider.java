@@ -3,10 +3,9 @@ package com.robby.baking_app;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
@@ -22,10 +21,9 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        final int N = appWidgetIds.length;
-        for (int i = 0; i < N; i++) {
+        for (int appWidgetId : appWidgetIds) {
             Intent serviceIntent = new Intent(context, RecipeFetchService.class);
-            serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+            serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             context.startService(serviceIntent);
         }
 
@@ -50,37 +48,21 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID);
+        ComponentName component = new ComponentName(context, BakingAppWidgetProvider.class);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        if (intent.getAction().equals(DATA_FETCHED)) {
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(component);
+        for (int appWidgetId : appWidgetIds) {
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+            if (intent.getAction().equals(DATA_FETCHED)) {
+                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+                updateWidgetUI(remoteViews);
+            } else if (intent.getAction().equals(ACTION_LEFT)) {
+                moveDataForwardOrBackward(-1, remoteViews);
+            } else if (intent.getAction().equals(ACTION_RIGHT)) {
+                moveDataForwardOrBackward(1, remoteViews);
+            }
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-        } else if (intent.getAction().equals(ACTION_LEFT)) {
-            moveDataForwardOrBackward(-1, remoteViews);
-        } else if (intent.getAction().equals(ACTION_RIGHT)) {
-            moveDataForwardOrBackward(1, remoteViews);
         }
-        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-    }
-
-    private RemoteViews updateWidgetListView(Context context, int appWidgetId) {
-        // which layout to show on widget
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-                R.layout.widget_layout);
-        // RemoteViews Service needed to provide adapter for ListView
-        Intent svcIntent = new Intent(context, RecipeFetchService.class);
-        // passing app widget id to that RemoteViews Service
-        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        // setting a unique Uri to the intent
-        // don't know its purpose to me right now
-        svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
-        // setting adapter to listview of the widget
-//        remoteViews.setRemoteAdapter(appWidgetId, R.id.spin_widget_recipe,
-//                svcIntent);
-        // setting an empty view in case of no data
-//        remoteViews.setEmptyView(R.id.spin_widget_recipe, R.id.tv_widget_recipe_ingredient);
-        return remoteViews;
     }
 
     private void moveDataForwardOrBackward(int movement, RemoteViews remoteViews) {
@@ -96,7 +78,10 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
                 showIndex--;
             }
         }
-        Log.d("Text Output Test", RecipeFetchService.getRecipes().get(showIndex).getName());
+        updateWidgetUI(remoteViews);
+    }
+
+    private void updateWidgetUI(RemoteViews remoteViews) {
         remoteViews.setTextViewText(R.id.tv_app_widget_recipe_name,
                 RecipeFetchService.getRecipes().get(showIndex).getName());
         remoteViews.setTextViewText(R.id.tv_app_widget_recipe_ingredients,
