@@ -2,20 +2,26 @@ package com.robby.baking_app.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.robby.baking_app.BuildConfig;
 import com.robby.baking_app.R;
 import com.robby.baking_app.RecipeListActivity;
 import com.robby.baking_app.entity.Recipe;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,11 +68,32 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 context.startActivity(intent);
             }
         });
-        if (recipes.get(holder.getAdapterPosition()).getImage().isEmpty()) {
-            holder.imRecipeImage.setImageResource(R.mipmap.no_recipe_image);
-        } else {
+        if (!TextUtils.isEmpty(recipes.get(holder.getAdapterPosition()).getImage())) {
             Picasso.with(context)
                     .load(recipes.get(holder.getAdapterPosition()).getImage())
+                    .into(holder.imRecipeImage);
+        } else if (!TextUtils.isEmpty(recipes.get(holder.getAdapterPosition()).getSteps().get(2).getVideoURL())) {
+            Bitmap videoBitmap;
+            MediaMetadataRetriever mediaMetadataRetriever = null;
+            try {
+                mediaMetadataRetriever = new MediaMetadataRetriever();
+                if (Build.VERSION.SDK_INT >= 14) {
+                    mediaMetadataRetriever.setDataSource(recipes.get(holder.getAdapterPosition()).getSteps().get(2).getVideoURL(), new HashMap<String, String>());
+                } else {
+                    mediaMetadataRetriever.setDataSource(recipes.get(holder.getAdapterPosition()).getSteps().get(2).getVideoURL());
+                }
+                videoBitmap = mediaMetadataRetriever.getFrameAtTime();
+                holder.imRecipeImage.setImageBitmap(videoBitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (mediaMetadataRetriever != null) {
+                    mediaMetadataRetriever.release();
+                }
+            }
+        } else {
+            Picasso.with(context)
+                    .load(BuildConfig.RECIPE_LIST_DEF_IMG)
                     .into(holder.imRecipeImage);
         }
     }
@@ -90,7 +117,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         public RecipeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            imRecipeImage.setAlpha(0.2f);
         }
     }
 }

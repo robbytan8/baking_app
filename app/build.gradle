@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 def DATA_URL = '\"https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json\"';
 def RECIPE_DEF_IMG = '\"https://www.rubios.com/sites/default/files/banners/Ingredients_Feature.jpg\"';
+def RECIPE_LIST_DEF_IMG = '\"http://maxpixel.freegreatpicture.com/static/photo/1x/Pastries-Bake-Dough-Cookie-Ingredients-1063024.jpg\"';
 
 android {
     compileSdkVersion 26
@@ -24,6 +25,7 @@ android {
     defaultConfig {
         buildConfigField("String", "DATA_URL", DATA_URL)
         buildConfigField("String", "RECIPE_DEF_IMG", RECIPE_DEF_IMG)
+        buildConfigField("String", "RECIPE_LIST_DEF_IMG", RECIPE_LIST_DEF_IMG)
     }
     packagingOptions {
         exclude 'META-INF/LICENSE'

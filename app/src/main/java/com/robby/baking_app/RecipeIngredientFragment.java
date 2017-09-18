@@ -23,8 +23,6 @@ public class RecipeIngredientFragment extends Fragment {
 
     @BindView(R.id.tv_ingredient)
     TextView tvIngredient;
-//    @BindView(R.id.ingredient_toolbar_layout)
-//    CollapsingToolbarLayout collapsingToolbarLayout;
 
     private String ingredientsInString;
 
@@ -37,9 +35,6 @@ public class RecipeIngredientFragment extends Fragment {
 
         if (getArguments().containsKey(getActivity().getResources()
                 .getString(R.string.send_string_ingredients_key))) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
             ingredientsInString = getArguments().getString(getActivity().getResources()
                     .getString(R.string.send_string_ingredients_key));
         }
@@ -51,7 +46,6 @@ public class RecipeIngredientFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         tvIngredient.setText(ingredientsInString);
-//        collapsingToolbarLayout.setTitle("Ingredients");
     }
 
     @Override

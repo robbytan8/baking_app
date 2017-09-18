@@ -49,6 +49,7 @@ public class RecipeStepFragment extends Fragment {
     private SimpleExoPlayer player;
 
     private RecipeStep recipeStep;
+    private long playerPosition;
 
     public RecipeStepFragment() {
     }
@@ -67,25 +68,32 @@ public class RecipeStepFragment extends Fragment {
     public void onPause() {
         super.onPause();
         saveVideoCurrentPosition();
+        player.setPlayWhenReady(false);
         player.release();
+        player = null;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        player.release();
+        if (player != null) {
+            player.release();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        initializePlayer();
+        recipeStepVideo.setPlayer(player);
+        player.setPlayWhenReady(true);
         loadVideoCurrentPosition();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong(getResources().getString(R.string.restore_state), player.getCurrentPosition());
+        outState.putLong(getResources().getString(R.string.restore_state), playerPosition);
     }
 
     @Override
@@ -102,31 +110,6 @@ public class RecipeStepFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         tvStepDescription.setText(recipeStep.getDescription());
-
-        // Measures bandwidth during playback. Can be null if not required.
-        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        // Produces DataSource instances through which media data is loaded.
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this.getActivity(),
-                Util.getUserAgent(this.getActivity(), "Baking App"), bandwidthMeter);
-        // Produces Extractor instances for parsing the media data.
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-        // This is the MediaSource representing the media to be played.
-        MediaSource videoSource = new ExtractorMediaSource(
-                Uri.parse(recipeStep.getVideoURL()).buildUpon().build(),
-                dataSourceFactory, extractorsFactory, null, null);
-
-        // Create a default TrackSelector
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector =
-                new DefaultTrackSelector(videoTrackSelectionFactory);
-
-        // 2. Create the player
-        player = ExoPlayerFactory.newSimpleInstance(this.getActivity(), trackSelector);
-        // Prepare the player with the source.
-        player.prepare(videoSource);
-
-        // Bind the player to the view.
         recipeStepVideo.setPlayer(player);
         if (TextUtils.isEmpty(recipeStep.getVideoURL())) {
             recipeStepVideo.setVisibility(View.INVISIBLE);
@@ -136,7 +119,29 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.initializePlayer();
         return inflater.inflate(R.layout.step_detail, container, false);
+    }
+
+    private void initializePlayer() {
+        if (player == null) {
+            DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this.getActivity(),
+                    Util.getUserAgent(this.getActivity(), "Baking App"), bandwidthMeter);
+            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+            MediaSource videoSource = new ExtractorMediaSource(
+                    Uri.parse(recipeStep.getVideoURL()).buildUpon().build(),
+                    dataSourceFactory, extractorsFactory, null, null);
+
+            TrackSelection.Factory videoTrackSelectionFactory =
+                    new AdaptiveTrackSelection.Factory(bandwidthMeter);
+            TrackSelector trackSelector =
+                    new DefaultTrackSelector(videoTrackSelectionFactory);
+
+            player = ExoPlayerFactory.newSimpleInstance(this.getActivity(), trackSelector);
+            player.prepare(videoSource);
+            player.setPlayWhenReady(true);
+        }
     }
 
     private void saveVideoCurrentPosition() {
@@ -144,6 +149,7 @@ public class RecipeStepFragment extends Fragment {
                 getResources().getString(R.string.shared_pref_name),
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        playerPosition = player.getCurrentPosition();
         editor.putLong(getResources().getString(R.string.shared_pref_key_video_position),
                 player.getCurrentPosition());
         editor.apply();
